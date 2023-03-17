@@ -17,15 +17,15 @@ namespace TechTeam
                 PrintSides(sides);
 
                 // Check if triangle is equilateral
-                bool isEquilateral = sides[0] == sides[1] && sides[1] == sides[2];
+                bool isEquilateral = IsEquilateral(sides);
                 PrintTraingleProperty(isEquilateral, "Equilateral");
 
                 // Check if triangle is isosceles
-                bool isIsosceles = sides[0] == sides[1] || sides[1] == sides[2] || sides[2] == sides[0];
+                bool isIsosceles = IsIsoceles(sides);
                 PrintTraingleProperty(isIsosceles, "Isoceles");
 
                 // Check if triangle is right-angled
-                bool isRight = IsRightTriangle(sides[0], sides[1], sides[2], isEquilateral);
+                bool isRight = IsRightTriangle(sides, isEquilateral);
                 PrintTraingleProperty(isRight, "Right");
 
                 // Calculate and output perimeter
@@ -45,14 +45,14 @@ namespace TechTeam
             }
         }
 
-        static bool isEquilateral(double[] sides)
+        static bool IsEquilateral(double[] sides)
         {
-            bool isEquilateral = sides[0] == sides[1] && sides[1] == sides[2];
-            if (isEquilateral)
-            {
-                Console.WriteLine("Trainge IS NOT ");
-            }
-            return isEquilateral;
+            return sides[0] == sides[1] && sides[1] == sides[2];
+        }
+
+        static bool IsIsoceles(double[] sides)
+        {
+            return sides[0] == sides[1] || sides[1] == sides[2] || sides[2] == sides[0]; ;
         }
 
         static void PrintTraingleProperty(bool value, string property)
@@ -87,14 +87,14 @@ namespace TechTeam
             {
                 if (double.TryParse(input, out double value))
                 {
-                    // The input is a valid integer, so we can cast it to double
+                    // The input is a valid number, so we can cast it to double
                     dot = (double)value;
                     Console.WriteLine("The input value is " + v + i + " is: " + dot);
                     isValidInput= false;
                 }
                 else
                 {
-                    // The input is not a valid integer, so we cannot cast it to double
+                    // The input is not a valid number, so we cannot cast it to double
                     Console.WriteLine("The input is not a double.");
                     Console.WriteLine("Enter " + v + i + " point: ");
                     input = Console.ReadLine().Replace('.', ',');
@@ -150,7 +150,7 @@ namespace TechTeam
             Console.WriteLine();
         }
 
-        static bool IsRightTriangle(double s1, double s2, double s3, bool isEquilateral)
+        static bool IsRightTriangle(double[] sides, bool isEquilateral)
         {
             if (isEquilateral)
             {
@@ -158,7 +158,6 @@ namespace TechTeam
             }
 
             // Sort the sides in ascending order
-            double[] sides = { s1, s2, s3 };
             Array.Sort(sides);
 
             // Check if the longest side satisfies the Pythagorean theorem
