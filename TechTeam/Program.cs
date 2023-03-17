@@ -6,36 +6,63 @@ namespace TechTeam
     {
         static void Main(string[] args)
         {
-            double[,] points = GetPoints();
+            bool Continue = true;
+            while (Continue)
+            {
+                double[,] points = GetPoints();
+                double[] sides = CalculateTriangleSides(points);
 
 
-            Console.WriteLine(points);
-            Console.ReadKey();
+                // Output side lengths
+                PrintSides(sides);
 
-            double[] sides = CalculateTriangleSides(points);
+                // Check if triangle is equilateral
+                bool isEquilateral = sides[0] == sides[1] && sides[1] == sides[2];
+                PrintTraingleProperty(isEquilateral, "Equilateral");
 
-            // Output side lengths
-            PrintSides(sides);
+                // Check if triangle is isosceles
+                bool isIsosceles = sides[0] == sides[1] || sides[1] == sides[2] || sides[2] == sides[0];
+                PrintTraingleProperty(isIsosceles, "Isoceles");
 
-            // Check if triangle is equilateral
+                // Check if triangle is right-angled
+                bool isRight = IsRightTriangle(sides[0], sides[1], sides[2], isEquilateral);
+                PrintTraingleProperty(isRight, "Right");
+
+                // Calculate and output perimeter
+                double perimeter = CalculatePerimeter(sides);
+
+                // Output even numbers up to perimeter
+                EvenNumbers(perimeter);
+
+
+                Console.WriteLine("Press Enter to Exit the program.");
+
+                if (Console.ReadKey().Key == ConsoleKey.Enter)
+                {
+                    Console.WriteLine("Exit");
+                    Continue = false;
+                }
+            }
+        }
+
+        static bool isEquilateral(double[] sides)
+        {
             bool isEquilateral = sides[0] == sides[1] && sides[1] == sides[2];
-            Console.WriteLine($"Is Equilateral triangle? {isEquilateral}");
+            if (isEquilateral)
+            {
+                Console.WriteLine("Trainge IS NOT ");
+            }
+            return isEquilateral;
+        }
 
-            // Check if triangle is isosceles
-            bool isIsosceles = sides[0] == sides[1] || sides[1] == sides[2] || sides[2] == sides[0];
-            Console.WriteLine($"Is Isosceles triangle? {isIsosceles}");
-
-            // Check if triangle is right-angled
-            bool isRight = IsRightTriangle(sides[0], sides[1], sides[2], isEquilateral);
-            Console.WriteLine($"Is Right triangle? {isRight}");
-
-            // Calculate and output perimeter
-            double perimeter = PrintPerimeter(sides);
-
-            // Output even numbers up to perimeter
-            EvenNumbers(perimeter);
-
-            Console.ReadKey();
+        static void PrintTraingleProperty(bool value, string property)
+        {
+            string whatIs = "IS NOT";
+            if (value)
+            {
+                whatIs = "IS";
+            }
+            Console.WriteLine($"Triangle {whatIs} {property}");
         }
 
         static double[,] GetPoints()
@@ -89,18 +116,18 @@ namespace TechTeam
 
         static double GetDistanceBetweenPoints(double x1, double y1, double x2, double y2)
         {
-           return Convert.ToInt32(Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)));
+           return (Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)));
         }
 
         static void PrintSides(double[] sides)
         {
             for (int i = 0; i < (sides.Length); i++)
-            {
-                Console.WriteLine("Side "+i+" length: " +sides[i]);
+            {   
+                Console.WriteLine("Side "+(i+1)+" length: " +sides[i]);
             }
         }
 
-        static double PrintPerimeter(double[] sides)
+        static double CalculatePerimeter(double[] sides)
         {
             double perimeter = 0;
             foreach(double s in sides)
@@ -117,9 +144,10 @@ namespace TechTeam
             {
                 if (i % 2 == 0)
                 {
-                    Console.Write($"{i} ");
+                    Console.Write($" {i} ");
                 }
             }
+            Console.WriteLine();
         }
 
         static bool IsRightTriangle(double s1, double s2, double s3, bool isEquilateral)
@@ -128,12 +156,13 @@ namespace TechTeam
             {
                 return false;
             }
+
             // Sort the sides in ascending order
             double[] sides = { s1, s2, s3 };
             Array.Sort(sides);
 
             // Check if the longest side satisfies the Pythagorean theorem
-            return Math.Pow(sides[2], 2) == Math.Pow(sides[0], 2) + Math.Pow(sides[1], 2);
+            return Convert.ToInt32(Math.Pow(sides[2], 2)) == Convert.ToInt32(Math.Pow(sides[0], 2) + Math.Pow(sides[1], 2));
         }
     }
 }
